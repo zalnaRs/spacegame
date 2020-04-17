@@ -1,0 +1,89 @@
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=7">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>space game</title>
+</head>
+
+<body>
+    <span id="elettext"></span>
+    <span id="lelottext"></span>
+</body>
+
+<script>
+    var lelot = 0;
+    var elet = 3;
+
+
+
+    function spawnUfo(event) {
+        var ufo = document.createElement("img");
+        ufo.src = "assets/ufo.gif?a=" + Math.random();
+        document.body.appendChild(ufo);
+        ufo.style.position = "absolute";
+        ufo.style.top = document.body.clientHeight * Math.random() - 100;
+        ufo.style.left = -200;
+
+        //ufo.style.filter = "contrast("+Math.random()+")";
+        ufo.style.filter += "brightness(" + Math.random() + ")";
+        ufok.push(ufo);
+
+        ufo.addEventListener("mousedown", robban);
+    }
+
+    function robban(event) {
+        var ufo = event.target;
+        document.body.removeChild(ufo);
+        ufok.splice(ufok.indexOf(ufo), 1);
+        var bumm = document.createElement("img");
+        bumm.src = "assets/bumm.gif?a=" + Math.random();
+        document.body.appendChild(bumm);
+        bumm.style.position = "absolute"
+        bumm.style.top = event.clientY - 100
+        bumm.style.left = event.clientX - 100
+        bumm.style.pointerEvents = 'none';
+        var robbanHang = new Audio('assets/bumm.mp3');
+        robbanHang.play();
+        setTimeout(function() {
+            lelot = lelot + 1;
+
+            document.body.removeChild(bumm);
+        }, 700);
+    }
+
+    function mindentmozgat() {
+        for (var i = 0; i < ufok.length; i++) {
+            ufok[i].style.left = parseInt(ufok[i].style.left) + 3;
+            if (parseInt(ufok[i].style.left) > document.body.clientWidth) {
+                document.body.removeChild(ufok[i]);
+                ufok.splice(i, 1);
+                elet = elet - 1;
+
+            }
+        }
+    }
+
+    function meghal() {
+        if (elet == 0) {
+            alert("meghaltál\n" + "lelötél: " + lelot)
+        }
+    }
+
+    function frissites() {
+        document.getElementById("elettext").textContent = "élet: " + elet;
+        document.getElementById("lelottext").textContent = "lelöt: " + lelot;
+    }
+
+    setInterval(mindentmozgat, 10);
+    setInterval(spawnUfo, 490);
+    setInterval(meghal, 10);
+    setInterval(frissites, 1)
+
+    var ufok = [];
+</script>
+
+</html>
